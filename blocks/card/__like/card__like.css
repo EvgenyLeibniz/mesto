@@ -5,7 +5,7 @@
   background-color: white;
   background-size: contain;
   background-repeat: no-repeat;
-  width: 22px;
+  min-width: 22px;
   min-height: 19px;
   cursor: pointer;
 }
