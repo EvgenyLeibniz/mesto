@@ -1,11 +1,12 @@
 .popup__submit-button {
-  width: 358px;
+  max-width: 358px;
   min-height: 50px;
   margin: 48px 36px 37px;
   padding: 0;
   border: 0;
   background-color: black;
-  font-family: Inter;
+  font-family: "Inter", Arial, sans-serif;
+  width: 100%;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
@@ -13,6 +14,7 @@
   text-align: center;
   color: white;
   cursor: pointer;
+  border-radius: 2px;
 }
 
 .popup__submit-button:hover {
