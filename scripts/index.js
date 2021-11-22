@@ -5,8 +5,8 @@ const popupCloseButton = popup.querySelector(".popup__close-button");
 const popupSubmitButton = popup.querySelector(".popup__submit-button");
 const nameUser = document.querySelector(".profile__name");
 const nameInfo = document.querySelector(".profile__name-info");
-let formName = popup.querySelector(".popup__input_type_name");
-let formInfo = popup.querySelector(".popup__input_type_info");
+const formName = popup.querySelector(".popup__input_type_name");
+const formInfo = popup.querySelector(".popup__input_type_info");
 
 function openPopup() {
   popup.classList.add("popup_opened");
@@ -29,5 +29,4 @@ editButton.addEventListener("click", openPopup);
 popupCloseButton.addEventListener("click", closePopup);
 formElement.addEventListener("submit", savePopup);
 
-// Спасибо за добавленные материалы для ознакомления, я понимаю, что показываю слабый уровень
-// подготовки и занимаю ваше время, благодарю за терпение))
+
