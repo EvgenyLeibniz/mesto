@@ -14,6 +14,7 @@
 @import url(../blocks/profile/__options/profile__options.css);
 @import url(../blocks/cards/cards.css);
 @import url(../blocks/card/card.css);
+@import url(../blocks/card/__delete-button/card__delete-button.css);
 @import url(../blocks/card/__photo/card__photo.css);
 @import url(../blocks/card/__commit/card__commit.css);
 @import url(../blocks/card/__info/card__info.css);
@@ -29,3 +30,6 @@
 @import url(../blocks/popup/__submit-button/popup__submit-button.css);
 @import url(../blocks/popup/__close-button/popup__close-button.css);
 @import url(../blocks/popup/_opened/popup_opened.css);
+@import url(../blocks/popup/__img/popup__img.css);
+@import url(../blocks/popup/__subtitle/popup__subtitle.css);
+@import url(../blocks/popup/__figure/popup__figure.css);

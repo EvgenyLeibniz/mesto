@@ -27,7 +27,7 @@
         <button class="profile__add-button" type="button">+</button>
       </section>
       <ul class="cards">
-        <li class="card">
+        <!-- <li class="card">
           <img
             class="card__photo"
             src="./images/karachaevsk.jpg"
@@ -84,7 +84,7 @@
             <h2 class="card__commit">Озеро Тургояк</h2>
             <button class="card__like"></button>
           </div>
-        </li>
+        </li> -->
       </ul>
     </main>
 
@@ -112,6 +112,48 @@
       </div>
     </div>
 
+    <div class="popup popup-add">
+      <div class="popup__content">
+        <h2 class="popup__title">Новое место</h2>
+        <form class="popup__form">
+          <button class="popup__close-button" type="reset"></button>
+          <input
+            class="popup__input popup__input_type_name"
+            type="text"
+            placeholder="Название"
+          />
+          <input
+            class="popup__input popup__input_type_info"
+            type="text"
+            placeholder="Ссылка на картинку"
+          />
+          <button class="popup__submit-button" type="submit">Добавить</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="popup popup-zoom">
+      <figure class="popup__figure">
+        <img class="popup__img" alt="Фотокарточка" />
+        <button class="popup__close-button" type="reset"></button>
+        <figcaption class="popup__subtitle"></figcaption>
+      </figure>
+    </div>
+
+    <template class="template">
+      <li class="card">
+        <img class="card__photo" alt="фотокарточка" />
+        <button class="card__delete-button"></button>
+        <div class="card__info">
+          <h2 class="card__commit"></h2>
+          <button class="card__like" type="button"></button>
+        </div>
+      </li>
+    </template>
     <script src="scripts/index.js"></script>
   </body>
 </html>
+
+<!-- Здравствуйте! Мне известна как минимум 1 проблема в реализации данной работы - происходит переполнение блока карточки двумя фотографиями,
+я приношу извинения, что отправляю такую сырую работу, я попробовал много методов исправления, но не сумел решить эту проблему.. :( 
+Старые образцы карточек в html документе остались для образца-->
