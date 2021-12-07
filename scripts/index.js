@@ -61,7 +61,7 @@ function getItem(item) {
     openPopupZoom(item.name, item.link)
   );
 
-  return newCard;
+  return newCard; /* вернуть собранную карточку */
 }
 
 function handleAdd(evt) {
