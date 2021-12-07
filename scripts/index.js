@@ -1,43 +1,21 @@
-const initialCards = [
-  {
-    name: "Архыз",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
-  },
-  {
-    name: "Челябинская область",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-  },
-  {
-    name: "Иваново",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-  },
-  {
-    name: "Камчатка",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
-  },
-  {
-    name: "Холмогорский район",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
-  },
-  {
-    name: "Байкал",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-  },
-];
-
+// -----------------------------------------------------------------------------переменные общие
 const formElement = document.querySelector(".popup__form");
 const editButton = document.querySelector(".profile__edit-button");
 
-const popup = document.querySelector(".popup-profile");
-const popupCloseButton = popup.querySelector(".popup__close-button");
-const popupSubmitButton = popup.querySelector(".popup__submit-button");
-const nameUser = document.querySelector(".profile__name");
-const nameInfo = document.querySelector(".profile__name-info");
-const formName = popup.querySelector(".popup__input_type_name");
-const formInfo = popup.querySelector(".popup__input_type_info");
-
+// -----------------------------------------------------------------------------переменные создания template карточек
 const cardsContainerEl = document.querySelector(".cards");
 const templateEl = document.querySelector(".template");
+
+// -----------------------------------------------------------------------------переменные попапа редактирования профиля
+const popupEdite = document.querySelector(".popup-profile");
+const popupCloseButton = popupEdite.querySelector(".popup__close-button");
+const popupSubmitButton = popupEdite.querySelector(".popup__submit-button");
+const nameUser = document.querySelector(".profile__name");
+const nameInfo = document.querySelector(".profile__name-info");
+const formName = popupEdite.querySelector(".popup__input_type_name");
+const formInfo = popupEdite.querySelector(".popup__input_type_info");
+
+// -----------------------------------------------------------------------------переменные попапа добавления карточки
 const popupAdd = document.querySelector(".popup-add");
 const buttonPlusCard = document.querySelector(".profile__add-button");
 const popupAddCloseButton = popupAdd.querySelector(".popup__close-button");
@@ -45,10 +23,16 @@ const buttonAddCard = popupAdd.querySelector(".popup__submit-button");
 const cardName = popupAdd.querySelector(".popup__input_type_name");
 const cardSrc = popupAdd.querySelector(".popup__input_type_info");
 
+// -----------------------------------------------------------------------------переменные увеличенной фотографии
 const popupZoom = document.querySelector(".popup-zoom");
+const popupPhotoZoom = popupZoom.querySelector(".popup__img");
+const popupSubtitleZoom = popupZoom.querySelector(".popup__subtitle");
 const buttonClosePopupZoom = popupZoom.querySelector(".popup__close-button");
 
+// -----------------------------------------------------------------------------функции
+
 function render() {
+  /*собрать карточки и добавить в начало*/
   const htmlCards = initialCards.map((item) => {
     return getItem(item);
   });
@@ -56,6 +40,7 @@ function render() {
 }
 
 function getItem(item) {
+  /*создать карточку, присвоить ей имя альт и фото, повесить слушатель лайка, удаления, зума */
   const newCard = templateEl.content.cloneNode(true);
 
   const cardCommit = newCard.querySelector(".card__commit");
@@ -63,6 +48,7 @@ function getItem(item) {
 
   const cardPhoto = newCard.querySelector(".card__photo");
   cardPhoto.src = item.link;
+  cardPhoto.alt = item.name;
 
   const buttonDeleteCard = newCard.querySelector(".card__delete-button");
   buttonDeleteCard.addEventListener("click", handleDelete);
@@ -70,12 +56,16 @@ function getItem(item) {
   const buttonCardLike = newCard.querySelector(".card__like");
   buttonCardLike.addEventListener("click", handleCardLike);
 
-  cardPhoto.addEventListener("click", openPopupZoom);
+  /*принимает свойства айтема(картчоки) name: '' ; и link: '' ; и запускает функцию */
+  cardPhoto.addEventListener("click", () =>
+    openPopupZoom(item.name, item.link)
+  );
 
   return newCard;
 }
 
 function handleAdd(evt) {
+  /*срабатывает на событие, предает значения из инпутов добавления карточки в поля карточки, добавляет в начало элемент*/
   evt.preventDefault();
   const inputText = cardName.value;
   const inputSrc = cardSrc.value;
@@ -84,73 +74,65 @@ function handleAdd(evt) {
 
   cardName.value = "";
   cardSrc.value = "";
-  closePopupAdd();
+  closePopup(popupAdd);
 }
 
 function handleDelete(event) {
+  /* срабатывает на событие, поднимает ближайший родительский .card, удавляет его */
   const targetCard = event.target;
   const cardItem = targetCard.closest(".card");
   cardItem.remove();
 }
 
 function handleCardLike(event) {
+  /*срабатывает на событие, цель сам элемент события, добавялет/удаляет стили лайка() */
   const targetCard = event.target;
   targetCard.classList.toggle("card__like_active");
 }
 
-// function openPopupZoom(event) {
-//   const targetCard = event.target;
-//   const cardItem = targetCard.closest(".card");
-
-//   const figureName = cardItem.querySelector(".card__commit");
-//   const name = figureName.textContent;
-
-//   const figurePhoto = cardItem.querySelector(".card__photo");
-//   const photoZoom = figurePhoto.src;
-
-//   const popupZoom = document.querySelector(".popup-zoom");
-//   popupZoom.classList.add("popup_opened");
-//   const popupPhotoZoom = popupZoom.querySelector(".popup__img");
-//   popupPhotoZoom.src = photoZoom;
-//   const popupSubtitleZoom = popupZoom.querySelector(".popup__subtitle");
-//   popupSubtitleZoom.textContent = name;
-// }
-
-function closePopupZoom() {
-  popupZoom.classList.remove("popup_opened");
+function openPopupZoom(name, link) {
+  /* принимает два параметра, запускает функцию открытия */
+  openPopup(popupZoom);
+  popupPhotoZoom.src = link;
+  popupSubtitleZoom.textContent = name;
 }
 
 function openPopup(popup) {
+  /* универсальная функция открытия попапа, принимает в параметр переменную, добавляет класс, открывающий попап */
   popup.classList.add("popup_opened");
-  formName.value = nameUser.textContent;
-  formInfo.value = nameInfo.textContent;
 }
 
 function closePopup(popup) {
+  /* универсальная функция закрытия попапа, принимает в параметр переменную, добавляет класс, открывающий попап */
   popup.classList.remove("popup_opened");
 }
 
 function savePopup(evt) {
+  /* срабатывает на событие, сохраняет значения из инпутов в поля страницы, закрывает попап редактирования профиля */
   evt.preventDefault();
   nameUser.textContent = formName.value;
   nameInfo.textContent = formInfo.value;
-  closePopup();
+  closePopup(popupEdite);
 }
 
-function openPopupAdd() {
-  popupAdd.classList.add("popup_opened");
-}
+// -----------------------------------------------слушатели
 
-function closePopupAdd() {
-  popupAdd.classList.remove("popup_opened");
-}
-
-buttonClosePopupZoom.addEventListener("click", closePopupZoom);
+buttonClosePopupZoom.addEventListener("click", () => closePopup(popupZoom));
 buttonAddCard.addEventListener("click", handleAdd);
-buttonPlusCard.addEventListener("click", openPopupAdd);
-popupAddCloseButton.addEventListener("click", closePopupAdd);
-editButton.addEventListener("click", openPopup);
-popupCloseButton.addEventListener("click", closePopup);
+
+buttonPlusCard.addEventListener("click", () => openPopup(popupAdd));
+popupAddCloseButton.addEventListener("click", () => {
+  closePopup(popupAdd);
+});
+
+editButton.addEventListener("click", () => {
+  openPopup(popupEdite);
+  /* передаю в слушатель функцию открытия попапа, которая забирает в себя значения из полей страницы (имя, описание) */
+  formName.value = nameUser.textContent;
+  formInfo.value = nameInfo.textContent;
+});
+
+popupCloseButton.addEventListener("click", () => closePopup(popupEdite));
 formElement.addEventListener("submit", savePopup);
 
 render();
