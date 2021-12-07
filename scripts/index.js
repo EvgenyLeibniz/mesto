@@ -91,10 +91,11 @@ function handleCardLike(event) {
 }
 
 function openPopupZoom(name, link) {
-  /* принимает два параметра, запускает функцию открытия */
-  openPopup(popupZoom);
+  /* принимает два параметра (но три атрибута src,alt,name), запускает функцию открытия */
   popupPhotoZoom.src = link;
+  popupPhotoZoom.alt = name;
   popupSubtitleZoom.textContent = name;
+  openPopup(popupZoom);
 }
 
 function openPopup(popup) {
