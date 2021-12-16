@@ -14,6 +14,7 @@ const nameUser = document.querySelector(".profile__name");
 const nameInfo = document.querySelector(".profile__name-info");
 const formName = popupEdite.querySelector(".popup__input_type_name");
 const formInfo = popupEdite.querySelector(".popup__input_type_info");
+const popupEditeOverlay = popupEdite.querySelector(".popup-profile__overlay");
 
 // -----------------------------------------------------------------------------переменные попапа добавления карточки
 const popupAdd = document.querySelector(".popup-add");
@@ -22,12 +23,14 @@ const popupAddCloseButton = popupAdd.querySelector(".popup__close-button");
 const buttonAddCard = popupAdd.querySelector(".popup__submit-button");
 const cardName = popupAdd.querySelector(".popup__input_type_name");
 const cardSrc = popupAdd.querySelector(".popup__input_type_info");
+const popupAddOverlay = popupAdd.querySelector(".popup-add__overlay");
 
 // -----------------------------------------------------------------------------переменные увеличенной фотографии
 const popupZoom = document.querySelector(".popup-zoom");
 const popupPhotoZoom = popupZoom.querySelector(".popup__img");
 const popupSubtitleZoom = popupZoom.querySelector(".popup__subtitle");
 const buttonClosePopupZoom = popupZoom.querySelector(".popup__close-button");
+const popupZoomOverlay = popupZoom.querySelector(".popup-zoom__overlay");
 
 // -----------------------------------------------------------------------------функции
 
@@ -100,12 +103,33 @@ function openPopupZoom(name, link) {
 
 function openPopup(popup) {
   /* универсальная функция открытия попапа, принимает в параметр переменную, добавляет класс, открывающий попап */
+  /* добавляет документу слушатель нажатия на ескейп, выполняющий функцию touchKeyClosePopup */
   popup.classList.add("popup_opened");
+  document.addEventListener("keydown", touchKeyClosePopup);
+  clickOverlay(); /* попробовал применить для всех функций при открытии повесить слушатель на закрытие по клику на оверлей,
+  но также параллельно сделал отдельные слушатели, сейчас данная функция выполняется только для popupZoom */
 }
 
 function closePopup(popup) {
   /* универсальная функция закрытия попапа, принимает в параметр переменную, добавляет класс, открывающий попап */
+  /* удаляет с документа слушатель нажатия на ескейп */
   popup.classList.remove("popup_opened");
+  document.removeEventListener("keydown", touchKeyClosePopup);
+}
+
+function touchKeyClosePopup(evt) {
+  /* принимает событие, если его ключ равен ескейп, то ищет по документу попап с классом открывания и применяет функцию closePopup(найденный попап) */
+  if (evt.key === "Escape") {
+    const activePopup = document.querySelector(".popup_opened");
+    closePopup(activePopup);
+  }
+}
+
+function clickOverlay() {
+  /* ничего не принимает, ищет открытый попап, в нем оверлей, на оверлей вешает слушатель на клик и закрытие*/
+  const usedPopup = document.querySelector(".popup_opened");
+  const popupOverlay = usedPopup.querySelector(".popup__overlay");
+  popupOverlay.addEventListener("click", () => closePopup(usedPopup));
 }
 
 function savePopup(evt) {
@@ -119,10 +143,14 @@ function savePopup(evt) {
 // -----------------------------------------------слушатели
 
 buttonClosePopupZoom.addEventListener("click", () => closePopup(popupZoom));
+// popupZoomOverlay.addEventListener("click", () => closePopup(popupZoom));
 buttonAddCard.addEventListener("click", handleAdd);
 
 buttonPlusCard.addEventListener("click", () => openPopup(popupAdd));
 popupAddCloseButton.addEventListener("click", () => {
+  closePopup(popupAdd);
+});
+popupAddOverlay.addEventListener("click", () => {
   closePopup(popupAdd);
 });
 
@@ -134,6 +162,7 @@ editButton.addEventListener("click", () => {
 });
 
 popupCloseButton.addEventListener("click", () => closePopup(popupEdite));
+popupEditeOverlay.addEventListener("click", () => closePopup(popupEdite));
 formElement.addEventListener("submit", savePopup);
 
 render();

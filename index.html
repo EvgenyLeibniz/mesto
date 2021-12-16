@@ -34,48 +34,67 @@
     </footer>
 
     <div class="popup popup-profile">
+      <div class="popup__overlay popup-profile__overlay"></div>
       <div class="popup__content">
         <h2 class="popup__title">Редактировать профиль</h2>
         <form class="popup__form">
           <button class="popup__close-button" type="reset"></button>
           <input
+            id="name-profile"
             class="popup__input popup__input_type_name"
             type="text"
             placeholder="Введите своё имя"
+            required
+            minlength="2"
+            maxlength="40"
           />
+          <span id="name-profile-error" class="popup__error"></span>
           <input
+            id="info-profile"
             class="popup__input popup__input_type_info"
             type="text"
             placeholder="Информация о себе"
+            required
+            minlength="2"
+            maxlength="200"
           />
+          <span id="info-profile-error" class="popup__error"></span>
           <button class="popup__submit-button" type="submit">Сохранить</button>
         </form>
       </div>
     </div>
 
     <div class="popup popup-add">
+      <div class="popup__overlay popup-add__overlay"></div>
       <div class="popup__content">
         <h2 class="popup__title">Новое место</h2>
         <form class="popup__form">
           <button class="popup__close-button" type="reset"></button>
           <input
+            id="card-name"
             class="popup__input popup__input_type_name"
             type="text"
             placeholder="Название"
             required
+            minlength="2"
+            maxlength="30"
           />
+          <span id="card-name-error" class="popup__error"></span>
           <input
+            id="card-link"
             class="popup__input popup__input_type_info"
-            type="text"
+            type="url"
             placeholder="Ссылка на картинку"
             required
           />
+          <span id="card-link-error" class="popup__error"></span>
           <button class="popup__submit-button" type="submit">Добавить</button>
         </form>
       </div>
     </div>
 
     <div class="popup popup-zoom">
+      <div class="popup__overlay popup-zoom__overlay"></div>
       <figure class="popup__figure">
         <img class="popup__img" alt="" />
         <button class="popup__close-button" type="reset"></button>
@@ -93,6 +112,7 @@
         </div>
       </li>
     </template>
+    <script src="scripts/validate.js"></script>
     <script src="scripts/cards.js"></script>
     <script src="scripts/index.js"></script>
   </body>
