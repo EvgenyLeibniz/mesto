@@ -4,7 +4,7 @@ const showInputError =
 добавляет невидимому спану класс видимости, меняет оформление инпута с ошибкой*/
   (formElement, input, errorMessageText, inputErrorClass, errorClass) => {
     const errorMessage = formElement.querySelector(`#${input.id}-error`);
-    console.log("123");
+
     errorMessage.textContent = errorMessageText;
     errorMessage.classList.add(errorClass);
     input.classList.add(inputErrorClass);
