@@ -2,6 +2,9 @@
 const formElement = document.querySelector(".popup__form");
 const editButton = document.querySelector(".profile__edit-button");
 
+const popupOverlays =
+  document.querySelectorAll(".popup__overlay"); /* <-- Все оверлеи */
+
 // -----------------------------------------------------------------------------переменные создания template карточек
 const cardsContainerEl = document.querySelector(".cards");
 const templateEl = document.querySelector(".template");
@@ -14,7 +17,6 @@ const nameUser = document.querySelector(".profile__name");
 const nameInfo = document.querySelector(".profile__name-info");
 const formName = popupEdite.querySelector(".popup__input_type_name");
 const formInfo = popupEdite.querySelector(".popup__input_type_info");
-const popupEditeOverlay = popupEdite.querySelector(".popup-profile__overlay");
 
 // -----------------------------------------------------------------------------переменные попапа добавления карточки
 const popupAdd = document.querySelector(".popup-add");
@@ -23,14 +25,12 @@ const popupAddCloseButton = popupAdd.querySelector(".popup__close-button");
 const buttonAddCard = popupAdd.querySelector(".popup__submit-button");
 const cardName = popupAdd.querySelector(".popup__input_type_name");
 const cardSrc = popupAdd.querySelector(".popup__input_type_info");
-const popupAddOverlay = popupAdd.querySelector(".popup-add__overlay");
 
 // -----------------------------------------------------------------------------переменные увеличенной фотографии
 const popupZoom = document.querySelector(".popup-zoom");
 const popupPhotoZoom = popupZoom.querySelector(".popup__img");
 const popupSubtitleZoom = popupZoom.querySelector(".popup__subtitle");
 const buttonClosePopupZoom = popupZoom.querySelector(".popup__close-button");
-const popupZoomOverlay = popupZoom.querySelector(".popup-zoom__overlay");
 
 // -----------------------------------------------------------------------------функции
 
@@ -106,8 +106,6 @@ function openPopup(popup) {
   /* добавляет документу слушатель нажатия на ескейп, выполняющий функцию touchKeyClosePopup */
   popup.classList.add("popup_opened");
   document.addEventListener("keydown", touchKeyClosePopup);
-  clickOverlay(); /* попробовал применить для всех функций при открытии повесить слушатель на закрытие по клику на оверлей,
-  но также параллельно сделал отдельные слушатели, сейчас данная функция выполняется только для popupZoom */
 }
 
 function closePopup(popup) {
@@ -125,13 +123,6 @@ function touchKeyClosePopup(evt) {
   }
 }
 
-function clickOverlay() {
-  /* ничего не принимает, ищет открытый попап, в нем оверлей, на оверлей вешает слушатель на клик и закрытие*/
-  const usedPopup = document.querySelector(".popup_opened");
-  const popupOverlay = usedPopup.querySelector(".popup__overlay");
-  popupOverlay.addEventListener("click", () => closePopup(usedPopup));
-}
-
 function savePopup(evt) {
   /* срабатывает на событие, сохраняет значения из инпутов в поля страницы, закрывает попап редактирования профиля */
   evt.preventDefault();
@@ -142,15 +133,22 @@ function savePopup(evt) {
 
 // -----------------------------------------------слушатели
 
+popupOverlays.forEach((overlayElement) =>
+  /* применяею метод forEach для всех оверлеев, которые нашлись, и передаю каждый найденный оверлэй, затем ему  
+  добавляется слушаетель события на клик, получающий евент и выполняющий функцию closePopup, которой передается
+  ближайший родитель с селектором .popup*/
+  {
+    overlayElement.addEventListener("click", function (event) {
+      closePopup(event.target.closest(".popup"));
+    });
+  }
+);
+
 buttonClosePopupZoom.addEventListener("click", () => closePopup(popupZoom));
-// popupZoomOverlay.addEventListener("click", () => closePopup(popupZoom));
 buttonAddCard.addEventListener("click", handleAdd);
 
 buttonPlusCard.addEventListener("click", () => openPopup(popupAdd));
 popupAddCloseButton.addEventListener("click", () => {
-  closePopup(popupAdd);
-});
-popupAddOverlay.addEventListener("click", () => {
   closePopup(popupAdd);
 });
 
@@ -162,7 +160,14 @@ editButton.addEventListener("click", () => {
 });
 
 popupCloseButton.addEventListener("click", () => closePopup(popupEdite));
-popupEditeOverlay.addEventListener("click", () => closePopup(popupEdite));
 formElement.addEventListener("submit", savePopup);
 
 render();
+
+/* Здравствуйте Михаил, впервые получил такое богатое хорошими советами и комментариями ревью, это просто шикарно!
+Я в восторге от комментариев, указаны ошибки и пути их реализации, один краше другого!!:))
+Огромное спасибо Вам за указанные методы, они действительно выглядят как магия!!! 
+Сейчас я тороплюсь ужаться в сроки дедлайна и не применил самый крутой метод, указанный вами последним, но доберусь до него.
+Дезактивацию кнопки я применил в файле validate.js на 70-й строке (вспомнил, что такое делали в тренажере 
+и метод показался более ленивым и простым) 
+Мне известно, что лишние комменатрии стоит удалять и сделаю это после сдачи, очень хотел выразить Вам свою благодарность!*/

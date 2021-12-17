@@ -67,6 +67,8 @@ const setInputListeners =
   ) => {
     const inputs = Array.from(formElement.querySelectorAll(inputSelector));
     const submitButton = formElement.querySelector(submitButtonSelector);
+    toggleButtonError(inputs, submitButton, inactiveButtonClass);
+    /* вызвал функцию проверки кнопки дважды, первый раз - дезактивация по открытию, второй раз - проверка на каждый инпут*/
 
     inputs.forEach((input) => {
       input.addEventListener("input", () => {
