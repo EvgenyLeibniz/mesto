@@ -25,6 +25,7 @@ const popupAddCloseButton = popupAdd.querySelector(".popup__close-button");
 const buttonAddCard = popupAdd.querySelector(".popup__submit-button");
 const cardName = popupAdd.querySelector(".popup__input_type_name");
 const cardSrc = popupAdd.querySelector(".popup__input_type_info");
+const popupAddForm = popupAdd.querySelector(".popup__form");
 
 // -----------------------------------------------------------------------------переменные увеличенной фотографии
 const popupZoom = document.querySelector(".popup-zoom");
@@ -75,6 +76,7 @@ function handleAdd(evt) {
   const cardItem = getItem({ name: inputText, link: inputSrc });
   cardsContainerEl.prepend(cardItem);
 
+  buttonAddCard.classList.add("popup__submit-button_disabled");
   cardName.value = "";
   cardSrc.value = "";
   closePopup(popupAdd);
@@ -145,7 +147,7 @@ popupOverlays.forEach((overlayElement) =>
 );
 
 buttonClosePopupZoom.addEventListener("click", () => closePopup(popupZoom));
-buttonAddCard.addEventListener("click", handleAdd);
+popupAddForm.addEventListener("submit", handleAdd);
 
 buttonPlusCard.addEventListener("click", () => openPopup(popupAdd));
 popupAddCloseButton.addEventListener("click", () => {
@@ -163,11 +165,3 @@ popupCloseButton.addEventListener("click", () => closePopup(popupEdite));
 formElement.addEventListener("submit", savePopup);
 
 render();
-
-/* Здравствуйте Михаил, впервые получил такое богатое хорошими советами и комментариями ревью, это просто шикарно!
-Я в восторге от комментариев, указаны ошибки и пути их реализации, один краше другого!!:))
-Огромное спасибо Вам за указанные методы, они действительно выглядят как магия!!! 
-Сейчас я тороплюсь ужаться в сроки дедлайна и не применил самый крутой метод, указанный вами последним, но доберусь до него.
-Дезактивацию кнопки я применил в файле validate.js на 70-й строке (вспомнил, что такое делали в тренажере 
-и метод показался более ленивым и простым) 
-Мне известно, что лишние комменатрии стоит удалять и сделаю это после сдачи, очень хотел выразить Вам свою благодарность!*/
