@@ -77,6 +77,7 @@ function handleAdd(evt) {
   cardsContainerEl.prepend(cardItem);
 
   buttonAddCard.classList.add("popup__submit-button_disabled");
+  buttonAddCard.setAttribute('disabled','disabled');
   cardName.value = "";
   cardSrc.value = "";
   closePopup(popupAdd);
