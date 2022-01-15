@@ -1,3 +1,32 @@
+import Card from "./Card.js";
+import FormValidator from "./FormValidator.js";
+//---------------------------------------------------------------------------------переменная для дефолтных карточек
+const initialCards = [
+  {
+    name: "Архыз",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
+  },
+  {
+    name: "Челябинская область",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
+  },
+  {
+    name: "Иваново",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
+  },
+  {
+    name: "Камчатка",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
+  },
+  {
+    name: "Холмогорский район",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
+  },
+  {
+    name: "Байкал",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
+  },
+];
 // -----------------------------------------------------------------------------переменные общие
 const formElement = document.querySelector(".popup__form");
 const editButton = document.querySelector(".profile__edit-button");
@@ -32,75 +61,45 @@ const popupZoom = document.querySelector(".popup-zoom");
 const popupPhotoZoom = popupZoom.querySelector(".popup__img");
 const popupSubtitleZoom = popupZoom.querySelector(".popup__subtitle");
 const buttonClosePopupZoom = popupZoom.querySelector(".popup__close-button");
+// -----------------------------------------------------------------------------для конструктора карточек
+const dataValidation = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__submit-button",
+  inactiveButtonClass: "popup__submit-button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+//-------------------------------------------------------------------------------константы для форм, которые создают новый класс
+//-------------------------------------------------------------валидации формы и принимают const=dataValidation, тем самым начиная валидацию форм
+const popupEditeValidator = new FormValidator(popupEdite, dataValidation);
+const popupAddValidator = new FormValidator(popupAdd, dataValidation);
 
-// -----------------------------------------------------------------------------функции
+popupEditeValidator.enableValidation();
+popupAddValidator.enableValidation();
 
+// ----------------------------------------------------------------------------- функциональность
 function render() {
   /*собрать карточки и добавить в начало*/
   const htmlCards = initialCards.map((item) => {
-    return getItem(item);
+    return new Card(".template", item).getView();
   });
   cardsContainerEl.append(...htmlCards);
 }
 
-function getItem(item) {
-  /*создать карточку, присвоить ей имя альт и фото, повесить слушатель лайка, удаления, зума */
-  const newCard = templateEl.content.cloneNode(true);
-
-  const cardCommit = newCard.querySelector(".card__commit");
-  cardCommit.textContent = item.name;
-
-  const cardPhoto = newCard.querySelector(".card__photo");
-  cardPhoto.src = item.link;
-  cardPhoto.alt = item.name;
-
-  const buttonDeleteCard = newCard.querySelector(".card__delete-button");
-  buttonDeleteCard.addEventListener("click", handleDelete);
-
-  const buttonCardLike = newCard.querySelector(".card__like");
-  buttonCardLike.addEventListener("click", handleCardLike);
-
-  /*принимает свойства айтема(картчоки) name: '' ; и link: '' ; и запускает функцию */
-  cardPhoto.addEventListener("click", () =>
-    openPopupZoom(item.name, item.link)
-  );
-
-  return newCard; /* вернуть собранную карточку */
-}
-
 function handleAdd(evt) {
-  /*срабатывает на событие, предает значения из инпутов добавления карточки в поля карточки, добавляет в начало элемент*/
+  /*срабатывает на событие, предает значения из инпутов добавления карточки в поля карточки, которая собирается
+  в новом классе new Card, добавляет в начало элемент очищает поля ввода, делает кнопку неактивной*/
   evt.preventDefault();
   const inputText = cardName.value;
   const inputSrc = cardSrc.value;
-  const cardItem = getItem({ name: inputText, link: inputSrc });
-  cardsContainerEl.prepend(cardItem);
+  const cardItem = new Card(".template", { name: inputText, link: inputSrc });
+  cardsContainerEl.prepend(cardItem.getView());
 
   buttonAddCard.classList.add("popup__submit-button_disabled");
   cardName.value = "";
   cardSrc.value = "";
   closePopup(popupAdd);
-}
-
-function handleDelete(event) {
-  /* срабатывает на событие, поднимает ближайший родительский .card, удавляет его */
-  const targetCard = event.target;
-  const cardItem = targetCard.closest(".card");
-  cardItem.remove();
-}
-
-function handleCardLike(event) {
-  /*срабатывает на событие, цель сам элемент события, добавялет/удаляет стили лайка() */
-  const targetCard = event.target;
-  targetCard.classList.toggle("card__like_active");
-}
-
-function openPopupZoom(name, link) {
-  /* принимает два параметра (но три атрибута src,alt,name), запускает функцию открытия */
-  popupPhotoZoom.src = link;
-  popupPhotoZoom.alt = name;
-  popupSubtitleZoom.textContent = name;
-  openPopup(popupZoom);
 }
 
 function openPopup(popup) {
