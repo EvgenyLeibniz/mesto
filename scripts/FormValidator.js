@@ -4,7 +4,7 @@ class FormValidator {
   constructor(formElement, dataValidation) {
     this._formElement = formElement;
     /* принимает в себя все инпуты, делает настоящий массив */
-    this._inputSelectors = Array.from(
+    this._inputs = Array.from(
       this._formElement.querySelectorAll(dataValidation.inputSelector)
     );
     this._submitButtonSelector = formElement.querySelector(
@@ -34,11 +34,11 @@ class FormValidator {
     input.classList.remove(this._inputErrorClass);
   }
 
-  /* приватный, принимает горку инпутов, делает из них настоящий массив (в конструкторе Array.from), 
+  /* приватный, принимает горку(массив) инпутов, делает из них настоящий массив (в конструкторе Array.from), 
  проверяет методом some, который принимает массив и проверяет есть ли хоть Один елемент, свойство 
  валидности которого НЕВАЛИДНО */
   _hasInvalidInput() {
-    return this._inputSelectors.some((el) => !el.validity.valid);
+    return this._inputs.some((el) => !el.validity.valid);
   }
 
   /* приватный, принимает , единичный инпут, сообщения об ошибке инпута, если свойство 
@@ -51,11 +51,11 @@ class FormValidator {
     }
   }
 
-  /* приватный, если проверка валидности  НЕвалидна (принимает в себя массив инпутов),
+  /* приватный, если проверка валидности  НЕвалидна ,
   то кнопке добавляет неактивный класс и состояние, иначе удаляет неактивный класс 
   и делает активной*/
   _toggleButtonError() {
-    if (this._hasInvalidInput(this._inputSelectors)) {
+    if (this._hasInvalidInput()) {
       this._submitButtonSelector.classList.add(this._inactiveButtonClass);
       this._submitButtonSelector.disabled = true;
     } else {
@@ -65,12 +65,12 @@ class FormValidator {
   }
 
   /* приватный, выполняет для данной формы проверну включения кнопки _toggleButtonError()(сразу отключает, т.к инпут пуст), 
-берет данные инпуты _inputSelectors(которое в коснтрукторе превратились в настоящий массив) и для каждого
+берет данные инпуты _inputs(которое в коснтрукторе превратились в настоящий массив) и для каждого
 выполняет метод forEach --> принимает инпут и вешает обработчик события на инпут, который при каждом инпуте 
 для данного элемента выполняет проверку валидности и включения/отключения кнопки */
   _setInputListeners() {
     this._toggleButtonError();
-    this._inputSelectors.forEach((input) => {
+    this._inputs.forEach((input) => {
       input.addEventListener("input", () => {
         this._checkInputValidity(input);
         this._toggleButtonError();
@@ -78,13 +78,12 @@ class FormValidator {
     });
   }
 
-  /* публичный метод включения валидации формы, который выполняет для массива инпутов методом forEach отключение
-   стандартной отправки формы, а также выполняет приватный метод _setInputListenners() */
+  /* публичный метод включения валидации формы, который выполняет для любой переданной формы отключение
+   стандартной отправки формы, а также выполняет приватный метод _setInputListenners(), который следит за кнопкой,
+   и валидностью введенных данных  */
   enableValidation() {
-    this._inputSelectors.forEach(() => {
-      this._formElement.addEventListener("submit", (event) => {
-        event.preventDefault();
-      });
+    this._formElement.addEventListener("submit", (event) => {
+      event.preventDefault();
     });
     this._setInputListeners();
   }

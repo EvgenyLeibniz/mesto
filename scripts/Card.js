@@ -1,3 +1,4 @@
+import { openPopup } from "./index.js";
 /* создаем сласс карточки, который принимаем селектор и предмет, из предмета берет
 свойства item.name и item.link */
 class Card {
@@ -17,6 +18,7 @@ class Card {
   /* создаем функцию нажатия (приватный мтеод) на кнопку делит -> удаление карточки */
   _handleDelete = () => {
     this._element.remove();
+    this._element = null;
   };
 
   /* создаем приватный метод добавления и удаления класса у лайка данной карточки */
@@ -28,8 +30,8 @@ class Card {
 
   /* создаем приватный метод открытия попапа при нажатии на фотографию каждой карточки
   для этого находим заново попап , передаем в него данный нашего экземпляра this._link
-  и this._name , после чего вешаем слушатель нажатия Escape на весь документ, который
-  сам себя удаляет по закрытию попап */
+  и this._name , и ИМПОРТИРУЕМ из index.js функцию openPopup(), которая наследует в себя слушатель
+  открытия попапа, а также закрытия на Escape */
   _openPopupZoom = () => {
     const popupZoom = document.querySelector(".popup-zoom");
     const popupPhotoZoom = popupZoom.querySelector(".popup__img");
@@ -38,19 +40,7 @@ class Card {
     popupPhotoZoom.src = this._link;
     popupPhotoZoom.alt = this._name;
     popupSubtitleZoom.textContent = this._name;
-    popupZoom.classList.add("popup_opened");
-
-    document.addEventListener("keydown", this._closePopupZoom);
-  };
-  _closePopupZoom = () => {
-    const popupZoom = document.querySelector(".popup-zoom");
-    popupZoom.classList.remove("popup_opened");
-    document.removeEventListener("keydown", this._pressEscpae);
-  };
-  _pressEscpae = (evt) => {
-    if (evt.key === "Escape") {
-      this._closePopupZoom();
-    }
+    openPopup(popupZoom);
   };
 
   /* создаем публичный метод(буду использовать в основном index.js), который собирает
