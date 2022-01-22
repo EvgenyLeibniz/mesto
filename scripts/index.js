@@ -91,19 +91,19 @@ function handleAdd(evt) {
   /*срабатывает на событие, предает значения из инпутов добавления карточки в поля карточки, которая собирается
   в новом классе new Card, добавляет в начало элемент очищает поля ввода, делает кнопку неактивной*/
   evt.preventDefault();
-  const NewCardText = cardInputName.value;
-  const NewCardSrc = cardInputSrc.value;
+  const newCardText = cardInputName.value;
+  const newCardSrc = cardInputSrc.value;
   const cardItem = new Card(".template", {
-    name: NewCardText,
-    link: NewCardSrc,
+    name: newCardText,
+    link: newCardSrc,
   });
 
   cardsContainerEl.prepend(cardItem.getView());
 
   buttonAddCard.setAttribute("disabled", "disabled");
   popupAddForm.reset();
+  popupAddValidator.toggleButtonError();
   closePopup(popupAdd);
-  popupAddValidator.enableValidation();
 }
 
 function openPopup(popup) {

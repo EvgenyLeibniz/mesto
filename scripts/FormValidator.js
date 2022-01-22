@@ -54,7 +54,7 @@ class FormValidator {
   /* приватный, если проверка валидности  НЕвалидна ,
   то кнопке добавляет неактивный класс и состояние, иначе удаляет неактивный класс 
   и делает активной*/
-  _toggleButtonError() {
+  toggleButtonError() {
     if (this._hasInvalidInput()) {
       this._submitButtonSelector.classList.add(this._inactiveButtonClass);
       this._submitButtonSelector.disabled = true;
@@ -69,11 +69,11 @@ class FormValidator {
 выполняет метод forEach --> принимает инпут и вешает обработчик события на инпут, который при каждом инпуте 
 для данного элемента выполняет проверку валидности и включения/отключения кнопки */
   _setInputListeners() {
-    this._toggleButtonError();
+    this.toggleButtonError();
     this._inputs.forEach((input) => {
       input.addEventListener("input", () => {
         this._checkInputValidity(input);
-        this._toggleButtonError();
+        this.toggleButtonError();
       });
     });
   }
