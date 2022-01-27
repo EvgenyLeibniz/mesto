@@ -100,7 +100,6 @@ function handleAdd(evt) {
 
   cardsContainerEl.prepend(cardItem.getView());
 
-  buttonAddCard.setAttribute("disabled", "disabled");
   popupAddForm.reset();
   popupAddValidator.toggleButtonError();
   closePopup(popupAdd);
